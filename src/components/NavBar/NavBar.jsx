@@ -1,22 +1,24 @@
-import { CartWidget } from "../CartWidget/CartWidget"
+import { Link } from "react-router-dom";
+import { CartWidget } from "../CartWidget/CartWidget";
 
 export const NavBar = () => {
-    return (
-        <div className="container-fluid mt-2">
-        
-        <nav className="navbar navbar-expand-lg navbar-light bg-light p-3">
-        <img  src="/img/LogoSport78Favicon2.jpg" alt="" width={"80px"}/>
-       <div className="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
-       <div className="navbar-nav">
-
-      <button className="btn btn-warning " href="#">Inicio</button>
-      <button className="btn btn-warning " href="#">Productos</button>
-      <button className="btn btn-warning " href="#">Contactos</button>
-    </div>
-  </div>
-  <CartWidget />
-</nav>
-</div>
-
-    )
-}
+  return (
+    <nav className="d-flex justify-content-around mt-2">
+      <h4>Tienda Sport 78</h4>
+      <div>
+        <Link to="/">
+          <button className="btn btn-danger mx-2">Inicio</button>
+        </Link>
+        <Link to="/category/rugby">
+          <button className="btn btn-danger mx-2">Rugby</button>
+        </Link>
+        <Link to="/category/futbol">
+          <button className="btn btn-danger mx-2">Futbol</button>
+        </Link>
+      </div>
+      <Link to="/cart">
+        <CartWidget />
+      </Link>
+    </nav>
+  );
+};
