@@ -40,5 +40,5 @@ export const ItemListContainer = () => {
       .catch((error) => console.log(error));
   }, [category]); 
 
-  return <>{isLoading ? <h2> Cargando productos... </h2> : <ItemList products={products} />}</>;
+  return <>{isLoading ? <h2> Cargando... </h2> : <ItemList products={products} />}</>;
 };

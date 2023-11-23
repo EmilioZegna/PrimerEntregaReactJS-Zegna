@@ -4,7 +4,9 @@ import { CartWidget } from "../CartWidget/CartWidget";
 export const NavBar = () => {
   return (
     <nav className="d-flex justify-content-around mt-2">
-      <h4>Tienda Sport 78</h4>
+      <Link to={"/"}>
+       <img src="/public/img/LogoSport78Favicon2.jpg" alt="" width={"50px"} height={"50px"} />
+      </Link>
       <div>
         <Link to="/">
           <button className="btn btn-danger mx-2">Inicio</button>
