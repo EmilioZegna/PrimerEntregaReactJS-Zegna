@@ -1,26 +1,38 @@
-import { Link } from "react-router-dom";
-import { CartWidget } from "../CartWidget/CartWidget";
+import React from 'react';
+import "./NavBar.css"
+import logo from "../../assets/img/logo.jpg"
+import menu from "../../assets/img/menu.png";
+import CartWidget from '../CartWidget/CartWidget';
+import {Link} from 'react-router-dom'
 
-export const NavBar = () => {
-  return (
-    <nav className="d-flex justify-content-around mt-2">
-      <Link to={"/"}>
-       <img src="/public/img/LogoSport78Favicon2.jpg" alt="" width={"50px"} height={"50px"} />
+function NavBar () {
+ return(
+  <header className='navBar'>
+    
+      <Link to='/' className='logoTitle'>
+      <img className='logo' src={logo} alt="logo"/>
+      <h2 className='titleNavBar'>Emilio Shop</h2>
       </Link>
-      <div>
-        <Link to="/">
-          <button className="btn btn-danger mx-2">Inicio</button>
-        </Link>
-        <Link to="/category/rugby">
-          <button className="btn btn-danger mx-2">Rugby</button>
-        </Link>
-        <Link to="/category/futbol">
-          <button className="btn btn-danger mx-2">Futbol</button>
-        </Link>
-      </div>
-      <Link to="/cart">
-        <CartWidget />
-      </Link>
+
+    <nav className='menu'>
+      <input type="checkbox" id='check'/>
+      <label for="check" className='checkBoton'>
+        <i className='menuIcono'><img src={menu} alt=""/></i>
+      </label>
+
+      <ul>
+        <Link to='/' className='a'>Home</Link>
+        <Link to='/category/rugby' className='a'>Rugby</Link>
+        <Link to='/category/futbol' className='a'>Futbol</Link>
+        <Link to='/category/tenis' className='a'>Tenis</Link>
+        <Link className="a" to="/nosotros">Nosotros</Link>
+        <Link className="a" to="/contacto">Contacto</Link>
+
+        <Link to='/cart'><li className='carrito'><a href='/cart'><CartWidget/></a></li></Link>
+      </ul>
     </nav>
-  );
-};
+  </header>
+ );
+}
+
+export default NavBar;

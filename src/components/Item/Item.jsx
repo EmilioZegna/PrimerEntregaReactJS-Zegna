@@ -1,27 +1,33 @@
-import { Link } from "react-router-dom";
+import React from "react";
+import "./Item.css";
+import {Link} from 'react-router-dom'
 
-export const Item = ({id, name, img, price }) => {
-  return (
+function Item({id, title, stock, precio, imagen}){
+  return(
     <>
-      
-
-    <div className="border-radius m-2 col-md-3">
-      <div className="card col-12" >
-        <div className="card-body">
-          <h5 className="card-title">{name}</h5>
-          <div >
-            <img src={img} alt="" width={"250px"} height={"250px"}/>
-          </div>
-          <h4>${price}</h4>
-          <div className="d-flex flex-row-reverse">
-          <Link to={`/item/${id}`}>
-            <button className="btn btn-primary ">Detalles</button>
-          </Link>
-          </div>
+    <div className="productos">
+      <div className="producto">
+        
+        <div className="imagen">
+          <img src={imagen} alt=""/>
         </div>
+
+       <div className="productoFooter">
+         <h2>{title}</h2>
+         <div className="precioStock">
+           <p>PRECIO: €{precio}</p>
+           <p>STOCK: {stock}</p>
+         </div>
+       </div>
+
+       <div className="botonDetalle">
+        <Link to={`/item/${id}`} className="titleDetalle">DETALLES</Link>
+       </div>
+       
       </div>
     </div>
-    
     </>
   );
-};
+}
+
+export default Item;

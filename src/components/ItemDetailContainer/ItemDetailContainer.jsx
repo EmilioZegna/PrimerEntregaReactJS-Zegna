@@ -1,21 +1,41 @@
-import { useEffect, useState } from "react"
-import { getProductById } from "../../asyncMock";
-import { ItemDetail } from "../ItemDetail/ItemDetail";
+import React from 'react'
+import ItemDetail from '../ItemDetail/ItemDetail';
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { db } from '../../utils/fireBaseConfiguration'
+import { doc, getDoc } from "firebase/firestore";
 
-export const ItemDetailContainer = () => {
-    const { id } = useParams();
-    const [item, setItem] = useState(null);
+function ItemDetailContainer() {
 
-    useEffect( () => { 
-      getProductById(id)
-        .then(resp => setItem(resp))
-        .catch(error => console.log(error));
-        
-     }, [])
-  return (
-    <>
-    {item && <ItemDetail {...item} />}
-    </>
-  )
+    const [producto, setProducto] = useState({});
+    const {idItem} = useParams();
+
+    useEffect(() => {
+      async function asyncProblem(){
+        try {
+          const docRef = doc(db, "productos", idItem);
+          const docSnap = await getDoc(docRef);
+          
+          if (docSnap.exists()) {
+            setProducto({
+              id: idItem,
+              ...docSnap.data(),
+            });     
+          } else {
+            console.log("NO HAY DOCUMENTO!")
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      asyncProblem();
+    }, [idItem]);
+
+    return(
+      <>
+        <ItemDetail item={producto} />
+      </>
+    );
 }
+
+export default ItemDetailContainer;

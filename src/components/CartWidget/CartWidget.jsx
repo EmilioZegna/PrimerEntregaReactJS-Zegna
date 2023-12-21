@@ -1,10 +1,17 @@
-import { BiCart } from "react-icons/bi";
+import {React, useContext} from 'react';
+import {CartContext} from "../CartContext/CartContext";
 
-export const CartWidget = () => {
-  return (
-    <div className="h-40">
-        <BiCart size={30}/>
-        <strong>4</strong>
+
+const CartWidget = () => {
+    const { calcularCantidades } = useContext(CartContext);
+
+    return(
+        <div>
+        <i className="bi bi-cart">
+            <span>{calcularCantidades()}</span>
+        </i>
     </div>
-  )
+    );
 }
+
+export default CartWidget;

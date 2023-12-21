@@ -1,13 +1,23 @@
-import { Item } from "../Item/Item"
+import React from 'react'
+import "./ItemList.css";
+import Item from '../Item/Item';
 
-export const ItemList = ({products}) => {
-  return (
-    <>
-    <div className="d-flex flex-wrap justify-content-center">
+function ItemList({ items }) {
+    return(
+        <div className='cardContainer'>
+            {
+         items.map( producto => (
+             <Item
+             id={producto.id}
+             title={producto.title}
+             stock={producto.stock}
+             precio={producto.precio}
+             imagen={producto.imagen}
+             />
+         ))
+        } 
+        </div>
+    );
+  }
 
-        {products.map( product => <Item key={product.id} {...product}  />)}
-    </div>
-        
-    </>
-  )
-}
+export default ItemList;

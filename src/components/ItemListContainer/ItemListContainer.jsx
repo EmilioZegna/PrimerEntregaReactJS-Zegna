@@ -1,44 +1,44 @@
-import { useEffect, useState } from "react";
-import { getProducts } from "../../asyncMock";
-import { ItemList } from "../ItemList/ItemList";
-import { useParams } from "react-router-dom";
+import React from 'react'
+import "./ItemListContainer.css";
+import ItemList from '../ItemList/ItemList';
+import { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
+import { db } from '../../utils/fireBaseConfiguration'
+import { collection, getDocs} from "firebase/firestore";
 
-export const ItemListContainer = () => {
-  const { category } = useParams();
-  
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
- 
+function ItemListContainer() {
+  const [productos, setProductos] = useState([])
+  const {idCategory} = useParams();
 
   useEffect(() => {
-    setIsLoading(true);
-    getProducts()
-      .then((resp) => {
-       
-        if (category) {
-          
-          const productsFilter = resp.filter((product) => product.category === category);
-            
+    async function asyncProblem() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "productos"));
+        const dataFromFirestore = querySnapshot.docs.map(item => ({
+          id: item.id,
+          ...item.data()
+        }))
+        setProductos(dataFromFirestore)
 
-            if(productsFilter.length > 0) {
-              
-              setProducts(productsFilter);
-            } else {
-             
-              setProducts(resp);
-            }
-
+        if (idCategory) {
+          setProductos(
+            dataFromFirestore.filter((producto) => producto.categoryId === idCategory)
+          );
         } else {
-          
-          
-          setProducts(resp);
+          setProductos(dataFromFirestore);
         }
+      } catch (error) {
+        console.error(error) 
+      }
+    };
+    asyncProblem();
+  }, [idCategory])
 
-       
-        setIsLoading(false);
-      })
-      .catch((error) => console.log(error));
-  }, [category]); 
+  return( 
+    <>
+    <ItemList items={productos} />
+    </>
+  );
+}
 
-  return <>{isLoading ? <h2> Cargando... </h2> : <ItemList products={products} />}</>;
-};
+export default ItemListContainer;
