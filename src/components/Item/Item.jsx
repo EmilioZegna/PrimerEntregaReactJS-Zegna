@@ -1,33 +1,41 @@
-import React from "react";
-import "./Item.css";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
+import { ItemCount } from "../ItemCount/ItemCount";
+import { useCart } from "../../context/CartContext";
+import Swal from "sweetalert2";
 
-function Item({id, title, stock, precio, imagen}){
-  return(
-    <>
-    <div className="productos">
-      <div className="producto">
-        
-        <div className="imagen">
-          <img src={imagen} alt=""/>
-        </div>
+export const Item = ({ id, name, image, description, price, stock }) => {
 
-       <div className="productoFooter">
-         <h2>{title}</h2>
-         <div className="precioStock">
-           <p>PRECIO: €{precio}</p>
-           <p>STOCK: {stock}</p>
-         </div>
-       </div>
+    const { addItem } = useCart()
+    const onAdd = (items) => {
+        addItem({
+            id,
+            name,
+            price,
+        }, items)
 
-       <div className="botonDetalle">
-        <Link to={`/item/${id}`} className="titleDetalle">DETALLES</Link>
-       </div>
-       
-      </div>
-    </div>
-    </>
-  );
-}
+        Swal.fire({
+            icon: 'success',
+            title: 'Producto agregado al carrito',
+            showConfirmButton: false,
+            timer: 1500,
+        })
+    }
 
-export default Item;
+    return (
+            <div className="m-2">
+                <div className="card mx-auto" style={{ width: "50%" }}>
+                    <div className="card-body text-center">
+                        <h5 className="card-title display-6">{name}</h5>
+                        <img src={image} alt="" className="img-fluid m-4" />
+                        <p className="card-text">{description}</p>
+                        <b className="card-text">Precio: ${price}</b>
+                        <ItemCount stock={stock} onAdd={onAdd} />
+                        <Link to={`/item/${id}`}>
+                            <button className="btn btn-outline-success m-4">Detalles</button>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+    

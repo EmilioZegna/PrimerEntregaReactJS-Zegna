@@ -1,31 +1,35 @@
-import React, { useState } from 'react'
-import { Link } from "react-router-dom";
-import "./ItemCount.css";
+import { useState } from "react"
 
-export const ItemCount = ({stock=0, initial=1, onAdd}) => {
-    const[contar, setCount] = useState(1);
+export const ItemCount = ({ stock, initial = 1, onAdd }) => {
+    const [count, setCount] = useState(initial)
 
-    const restar = () => {
-        setCount(contar - 1)
+    const increment = () => {
+        if (count < stock) {
+            return setCount(count + 1)
+        }
+        setCount(count)
     }
 
-    const sumar = () => {
-        setCount(contar + 1)
+    const decrement = () => {
+        if (count === 0) {
+            return setCount(0)
+        }
+        setCount(count - 1)
     }
 
-    return(
-        <div className='itemCount'>
-            <button className='boton' onClick={restar} disabled={contar <= 1}>-</button>
-            <span>{contar}</span>
-            <button className='boton' onClick={sumar} disabled={contar >= 100}>+</button>
-            
+    return (
+        <div>
             <div>
-             <button className='botonAgregar' onClick={() => onAdd(contar)}>
-                <Link className='nameBoton'>AGREGAR A CARRITO</Link>
-             </button>
+                <button className="btn btn-outline-secondary m-2" onClick={decrement}>
+                    -
+                </button>
+                <strong>{count}</strong>
+                <button className="btn btn-outline-secondary m-2" onClick={increment}>
+                    +
+                </button>
             </div>
+            <button className="btn btn-outline-primary" onClick={() => onAdd(count)}>Agregar al carrito</button>
         </div>
-    );
+    )
 }
    
-export default ItemCount;

@@ -1,98 +1,57 @@
 import { useContext } from "react";
-import { CartContext } from "../CartContext/CartContext";
-import { Link } from 'react-router-dom'
-import { serverTimestamp, doc, setDoc, collection, updateDoc, increment} from "firebase/firestore";
-import { db } from '../../utils/fireBaseConfiguration'
-import "./Cart.css";
+import { useNavigate } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
+import Swal from "sweetalert2";
 
-const Cart = () => {
+export const Cart = () => {
+    const navigate = useNavigate()
+    const { cartItems, totalCartItems, removeItem, updateItemQuantity, clearCartItems } = useContext(CartContext)
 
-  const {cartList, borrarCarrito, removeItem, precioTotal} = useContext(CartContext);
-
-  const crearOrden = async () => {
-
-    let itemsForDB = cartList.map(item => ({
-      id: item.id,
-      title: item.title,
-      precio: item.precio,
-      cantidad: item.cantidad
-    }))
-
-    let orden = {
-      comprador:{
-        name: "Emilio Zegna",
-        email: "emizegna@hotmail.com",
-        phone: "3412158421"
-      },
-      date: serverTimestamp(),
-      items: itemsForDB,
-      total: precioTotal()
-    }
-    const nuevaOrden = doc(collection(db, "orders"))
-    await setDoc(nuevaOrden, orden);
-    cartList.borrarCarrito()
-  
-    //ACTUALIZANDO UN DOCUMENTO
-    itemsForDB.map(async (item) => {
-      const itemRef = doc(db, "productos", item.id);
-      await updateDoc(itemRef, {
-        stock: increment(-item.cantidad)
-      });
-    })
-  }
- 
-  if (cartList.length === 0){
-    return(
-      <>
-       <h1 className="titleCart">TU CARRITO 🛒</h1>
-        <div className="botonesCart">
-          <button className="botonBorrarProductos" onClick={borrarCarrito}><h2>BORRAR PRODUCTOS</h2></button>
-          <Link to="/"><button className="botonContinuarComprando"><h2>SEGUIR COMPRANDO</h2></button></Link>
-        </div>
-        <div className="parrafoNoHayProductos"><h2>⛔NO HAY PRODUCTOS EN EL CARRITO⛔</h2></div>
-      </>
-    );
-  }
-
-  return(
-      <>
-     
-        <div className="cart">
-          <h1 className="titleCart">TU CARRITO 🛒</h1>
-          <div className="botonesCart">
-           <button className="botonBorrarProductos" onClick={borrarCarrito}><h2>BORRAR PRODUCTOS</h2></button>
-           <Link to="/"><button className="botonContinuarComprando"><h2>SEGUIR COMPRANDO</h2></button></Link>
-          </div>
-          {
-            cartList.map((item) => {
-              return(
-                <div className="itemCart">
-                  <img src={item.imagen} alt={item.title}/>
-                  
-                  <div className="titlePrecio">
-                    <li>{item.title}</li>
-                    <li>€{item.precio}</li>
-                    <br></br>
-                    <p>CANTIDAD: {item.cantidad}</p>
-                    <p>SUBTOTAL: €{item.cantidad * item.precio}</p>
-                  </div>
-                  <br></br>
-        
-                  <button className="botonRemover" onClick={() => {removeItem(item.id);}}>
-                    <i>BORRAR PRODUCTO</i>
-                  </button>
-                </div>
-              )
+    const handleConfirmOrder = () => {
+        if (cartItems.length === 0) {
+            Swal.fire({
+                title: "Carrito de compras vacio",
+                text: "Por favor, agrega productos antes de finalizar la compra",
+                icon: "error"
             })
-          }
+
+        } else {
+            navigate("/confirmar-compra")
+        }
+    }
+
+    const handleEmptyCart = () => {
+        clearCartItems()
+    }
+
+    return (
+        <div className="card mx-auto text-center" style={{ width: "50%" }}>
+            <h2 className="text-primary">Carrito</h2>
+            
+                {cartItems.map((item) => (
+                    <div key={item.id} className="border p-3 mb-3">
+                        <p className="mb-1 fw-bold">Nombre: {item.name}</p>
+                        <p className="mb-1">Precio unitario: ${item.price}</p>
+                        <p className="mb-1">Cantidad: {item.quantity}</p>
+                        <p className="mb-1">Subtotal: ${item.subTotal}</p>
+                        <div className="mb-2">
+                            <button className="btn btn-danger m-2" onClick={() => updateItemQuantity(item.id, item.quantity - 1)}>Quitar</button>
+                            <button className="btn btn-success m-2" onClick={() => updateItemQuantity(item.id, item.quantity + 1)}>Añadir</button>
+                        </div>
+                        <button className="btn btn-outline-danger m-2" onClick={() => removeItem(item.id)}>
+                            Eliminar
+                        </button>
+                    </div>
+                ))}
+            
+            <h3 className="fw-bold m-2">Suma total del carrito ${totalCartItems}</h3>
+            <button className="btn btn-primary mx-auto m-2" style={{ width: "20%" }} onClick={handleConfirmOrder}>Confirmar Compra</button>
+
+            <button className="btn btn-danger mx-auto m-2" style={{ width: "20%" }} onClick={handleEmptyCart}>
+                    Vaciar Carrito
+                </button>
         </div>
-        
-        <div className="totalYFinalizarCompra">
-          <p>TOTAL: €{precioTotal()}</p>
-          <Link><button className="botonFinalizarCompra" onClick={crearOrden}><h2>FINALIZAR COMPRA</h2></button></Link>
-        </div>
-      </>
-  )
+    )
 }
 
 

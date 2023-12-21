@@ -1,38 +1,27 @@
-import React from 'react';
-import "./NavBar.css"
-import logo from "../../assets/img/logo.jpg"
-import menu from "../../assets/img/menu.png";
-import CartWidget from '../CartWidget/CartWidget';
-import {Link} from 'react-router-dom'
+import { CartWidget } from "../CartWidget/CartWidget.jsx"
+import { Link } from "react-router-dom"
 
-function NavBar () {
- return(
-  <header className='navBar'>
-    
-      <Link to='/' className='logoTitle'>
-      <img className='logo' src={logo} alt="logo"/>
-      <h2 className='titleNavBar'>Emilio Shop</h2>
-      </Link>
-
-    <nav className='menu'>
-      <input type="checkbox" id='check'/>
-      <label for="check" className='checkBoton'>
-        <i className='menuIcono'><img src={menu} alt=""/></i>
-      </label>
-
-      <ul>
-        <Link to='/' className='a'>Home</Link>
-        <Link to='/category/rugby' className='a'>Rugby</Link>
-        <Link to='/category/futbol' className='a'>Futbol</Link>
-        <Link to='/category/tenis' className='a'>Tenis</Link>
-        <Link className="a" to="/nosotros">Nosotros</Link>
-        <Link className="a" to="/contacto">Contacto</Link>
-
-        <Link to='/cart'><li className='carrito'><a href='/cart'><CartWidget/></a></li></Link>
-      </ul>
-    </nav>
-  </header>
- );
-}
-
-export default NavBar;
+export const NavBar = () => {
+    return (
+        <nav className="navbar navbar-expand-lg navbar-light bg-light justify-content-between p-3"> 
+            <img src="/public/img/logo.jpg" alt="Hola buenas tardes" style={{ width: "130px" }} />
+            <div>
+                <Link to= "/">
+                <button className= "btn btn-outline-info mx-2">Inicio</button>
+                </Link >
+                <Link to="/category/futbol">
+                <button className= "btn btn-outline-info mx-2">Futbol</button>
+                </Link>
+                <Link to="/category/rugby"> 
+                <button className= "btn btn-outline-info mx-2">Rugby</button>
+                </Link>
+                <Link to="/category/tenis">
+                <button className= "btn btn-outline-info mx-2">Tenis</button>
+                </Link>
+            </div>
+            <Link to="/cart">
+            <CartWidget/>
+            </Link>
+        </nav>
+    );
+};

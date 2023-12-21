@@ -1,17 +1,15 @@
-import {React, useContext} from 'react';
-import {CartContext} from "../CartContext/CartContext";
+import { BsCart3 } from "react-icons/bs"
+import { useCart } from "../../context/CartContext"
 
+export const CartWidget = () => {
+    const { totalQuantity } = useCart()
 
-const CartWidget = () => {
-    const { calcularCantidades } = useContext(CartContext);
-
-    return(
-        <div>
-        <i className="bi bi-cart">
-            <span>{calcularCantidades()}</span>
-        </i>
-    </div>
-    );
+    return (
+            <div className="d-flex">
+                <BsCart3 color="#58ACFA" size={30} />
+                <span className="text-dark">({totalQuantity})</span>
+            </div>
+    )
 }
 
 export default CartWidget;

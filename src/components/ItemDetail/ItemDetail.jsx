@@ -1,56 +1,40 @@
-import React, {useContext, useState} from 'react'
-import "./ItemDetail.css";
-import ItemCount from '../ItemCount/ItemCount';
-import { CartContext } from '../CartContext/CartContext';
-import {Link} from 'react-router-dom'
+import { ItemCount } from "../ItemCount/ItemCount";
+import { useCart } from "../../context/CartContext";
+import Swal from "sweetalert2";
 
+export const ItemDetail = ({ id, name, description, image, price, stock }) => {
+    const { addItem } = useCart()
 
-function ItemDetail({ item }){
-  const {addItem} = useContext(CartContext);
-  const [itemCount, setItemCount] = useState(0);
+    const onAdd = (items) => {
+        addItem({
+            id,
+            name,
+            description,
+            image,
+            price,
+        }, items)
 
-  const handleRestar = () => {
-    cantidad > 1 && setCantidad(cantidad - 1)
-}
+        Swal.fire({
+            icon: 'success',
+            title: 'El producto se agrego correctamente',
+            showConfirmButton: false,
+            timer: 1500,
+        })
+    }
 
-const handleSumar = () => {
-    cantidad < item.stock && setCantidad(cantidad + 1)
-}
-
-  const onAdd = (cantidad) => {
-    addItem(item, cantidad)
-    alert(`AGREGASTE ${cantidad} PRODUCTOS AL CARRITO`);
-    setItemCount(item)
-  };
-
-  return(
-    <>
-      <div className="productos">
-       <div className="producto">
-        
-         <div className='imagen'>
-          <img src={item.imagen} alt={item.id}></img>
-         </div>
-    
-         <div className="productoFooter">
-          <h2>{item.title}</h2>
-          <div className="precioStock">
-            <p>PRECIO: €{item.precio}</p>
-            <p>STOCK: {item.stock}</p>
-          </div>
-         </div>
-
-         {
-          itemCount === 0
-          ? <ItemCount stock={item.stock} initial={1} onAdd={onAdd}/>
-          : <div className='botonFinalizarCompra'><Link to='/cart' className='titleFinalizarCompra'>FINALIZAR COMPRA</Link></div>
-         }
-
-       </div>
-      </div>
-    </>
-  ); 
-}
-
-
-export default ItemDetail;
+    return (
+        <div className="m-2">
+            <div className="card mx-auto" style={{ width: "50%" }}>
+                <div className="card-body text-center">
+                    <h5 className="card-title">{name}</h5>
+                    <img src={image} alt="" className="img-fluid m-4" />
+                    <p className="card-text"> {description} </p>
+                    <b>Precio: ${price} </b>
+                    <div className="my-4">
+                        <ItemCount stock={stock} onAdd={onAdd} />
+                    </div>
+                </div>
+            </div>
+        </div>
+  );
+};

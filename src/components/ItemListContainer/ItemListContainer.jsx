@@ -1,44 +1,51 @@
-import React from 'react'
-import "./ItemListContainer.css";
-import ItemList from '../ItemList/ItemList';
-import { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
-import { db } from '../../utils/fireBaseConfiguration'
-import { collection, getDocs} from "firebase/firestore";
+import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { db } from "../../config/firebaseConfig";
+import { ItemList } from "../ItemList/ItemList";
+import { useParams } from "react-router-dom";
 
-function ItemListContainer() {
-  const [productos, setProductos] = useState([])
-  const {idCategory} = useParams();
+export const ItemListContainer = () => {
+    const { category } = useParams()
 
-  useEffect(() => {
-    async function asyncProblem() {
-      try {
-        const querySnapshot = await getDocs(collection(db, "productos"));
-        const dataFromFirestore = querySnapshot.docs.map(item => ({
-          id: item.id,
-          ...item.data()
-        }))
-        setProductos(dataFromFirestore)
+    const [products, setProducts] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [setProduct] = useState(null)
 
-        if (idCategory) {
-          setProductos(
-            dataFromFirestore.filter((producto) => producto.categoryId === idCategory)
-          );
-        } else {
-          setProductos(dataFromFirestore);
+    const getProductsDB = async (category) => {
+        const myProducts = category
+            ? query(collection(db, "productos"), where("category", "==", category))
+            : query(collection(db, "productos"))
+        const resp = await getDocs(myProducts)
+        if (resp.size === 0) {
         }
-      } catch (error) {
-        console.error(error) 
-      }
-    };
-    asyncProblem();
-  }, [idCategory])
 
-  return( 
-    <>
-    <ItemList items={productos} />
-    </>
-  );
+        const productList = resp.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+        setProducts(productList)
+        setIsLoading(false)
+    }
+
+    const getProductById = async (id) => {
+        const productRef = doc(db, "products", id)
+        const resp = await getDoc(productRef)
+        if (resp.exists()) {
+            const prod = {
+                id: resp.id,
+                ...resp.data()
+            }
+            setProduct(prod)
+        }
+    }
+
+    useEffect(() => {
+        setIsLoading(true)
+        getProductsDB(category)
+        getProductById(" ")
+    }, [category])
+
+    return (
+        <>
+            {isLoading ? <div className="text-center"><img src="/public/img/loading.gif" alt="" /></div>: <ItemList products={products} />}
+        </>
+    );
 }
 
-export default ItemListContainer;

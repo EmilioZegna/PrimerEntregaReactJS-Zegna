@@ -1,41 +1,48 @@
-import React from 'react'
-import ItemDetail from '../ItemDetail/ItemDetail';
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { db } from '../../utils/fireBaseConfiguration'
-import { doc, getDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { ItemDetail } from "../ItemDetail/ItemDetail";
+import { db } from "../../config/firebaseConfig";
+import { getDoc, doc } from "firebase/firestore";
+import Swal from "sweetalert2";
 
-function ItemDetailContainer() {
-
-    const [producto, setProducto] = useState({});
-    const {idItem} = useParams();
+export const ItemDetailContainer = () => {
+    const navigate = useNavigate()
+    const { id } = useParams()
+    const [item, setItem] = useState(null)
 
     useEffect(() => {
-      async function asyncProblem(){
-        try {
-          const docRef = doc(db, "productos", idItem);
-          const docSnap = await getDoc(docRef);
-          
-          if (docSnap.exists()) {
-            setProducto({
-              id: idItem,
-              ...docSnap.data(),
-            });     
-          } else {
-            console.log("NO HAY DOCUMENTO!")
-          }
-        } catch (error) {
-          console.log(error)
-        }
-      }
-      asyncProblem();
-    }, [idItem]);
+        const fetchData = async () => {
+            try {
+                const itemRef = doc(db, 'productos', id)
+                const docSnap = await getDoc(itemRef)
 
-    return(
-      <>
-        <ItemDetail item={producto} />
-      </>
+                if (docSnap.exists()) {
+                    setItem({ id: docSnap.id, ...docSnap.data() })
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "El producto no existe",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            navigate("/")
+                        }
+                    })
+                }
+            } catch (error) {
+                console.error('Error')
+            }
+        }
+
+        fetchData()
+    }, [id, navigate])
+
+    return (
+        <>
+            <div className="container">
+                {item && <ItemDetail {...item} />}
+            </div>
+        </>
     );
 }
 
-export default ItemDetailContainer;
