@@ -1,0 +1,8 @@
+.datos {
+    text-align: center;
+    margin-left: 500px;
+    margin-top: 10px;
+    border: 2px solid black;
+    border-radius: .5rem;
+    width: 40%;
+}

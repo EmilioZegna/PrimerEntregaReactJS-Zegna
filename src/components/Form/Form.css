@@ -1,0 +1,8 @@
+.cardCompra {
+    background-color: rgb(88, 86, 86);
+    text-align: center;
+    margin-left: 500px;
+    margin-bottom: 10px;
+    border: 1px solid black;
+    border-radius: .5rem;
+}

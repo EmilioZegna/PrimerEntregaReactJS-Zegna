@@ -25,7 +25,7 @@ export const ItemListContainer = () => {
     }
 
     const getProductById = async (id) => {
-        const productRef = doc(db, "products", id)
+        const productRef = doc(db, "productos", id)
         const resp = await getDoc(productRef)
         if (resp.exists()) {
             const prod = {

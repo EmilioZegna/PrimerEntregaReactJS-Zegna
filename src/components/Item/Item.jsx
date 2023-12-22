@@ -3,7 +3,7 @@ import { ItemCount } from "../ItemCount/ItemCount";
 import { useCart } from "../../context/CartContext";
 import Swal from "sweetalert2";
 
-export const Item = ({ id, name, image, description, price, stock }) => {
+export const Item = ({ id, name, img, description, price, stock }) => {
 
     const { addItem } = useCart()
     const onAdd = (items) => {
@@ -11,6 +11,7 @@ export const Item = ({ id, name, image, description, price, stock }) => {
             id,
             name,
             price,
+            img,
         }, items)
 
         Swal.fire({
@@ -26,7 +27,7 @@ export const Item = ({ id, name, image, description, price, stock }) => {
                 <div className="card mx-auto" style={{ width: "50%" }}>
                     <div className="card-body text-center">
                         <h5 className="card-title display-6">{name}</h5>
-                        <img src={image} alt="" className="img-fluid m-4" />
+                        <img src={img} alt="" className="img-fluid m-4" />
                         <p className="card-text">{description}</p>
                         <b className="card-text">Precio: ${price}</b>
                         <ItemCount stock={stock} onAdd={onAdd} />

@@ -10,8 +10,8 @@ export const Cart = () => {
     const handleConfirmOrder = () => {
         if (cartItems.length === 0) {
             Swal.fire({
-                title: "Carrito de compras vacio",
-                text: "Por favor, agrega productos antes de finalizar la compra",
+                title: "Carrito vacio",
+                text: "Por favor, añada productos",
                 icon: "error"
             })
 
@@ -25,13 +25,13 @@ export const Cart = () => {
     }
 
     return (
-        <div className="card mx-auto text-center" style={{ width: "50%" }}>
-            <h2 className="text-primary">Carrito</h2>
+        <div className="card mx-auto text-center mt-4 border border-4" style={{ width: "50%" }}>
+            <h2 className="text-primary"></h2>
             
                 {cartItems.map((item) => (
                     <div key={item.id} className="border p-3 mb-3">
                         <p className="mb-1 fw-bold">Nombre: {item.name}</p>
-                        <p className="mb-1">Precio unitario: ${item.price}</p>
+                        <p className="mb-1">Precio por unidad: ${item.price}</p>
                         <p className="mb-1">Cantidad: {item.quantity}</p>
                         <p className="mb-1">Subtotal: ${item.subTotal}</p>
                         <div className="mb-2">
@@ -44,15 +44,12 @@ export const Cart = () => {
                     </div>
                 ))}
             
-            <h3 className="fw-bold m-2">Suma total del carrito ${totalCartItems}</h3>
-            <button className="btn btn-primary mx-auto m-2" style={{ width: "20%" }} onClick={handleConfirmOrder}>Confirmar Compra</button>
+            <h3 className="m-2">Total ${totalCartItems}</h3>
+            <button className="btn btn-warning mx-auto m-2" style={{ width: "20%" }} onClick={handleConfirmOrder}>Confirmar</button>
 
-            <button className="btn btn-danger mx-auto m-2" style={{ width: "20%" }} onClick={handleEmptyCart}>
-                    Vaciar Carrito
+            <button className="btn btn-warning mx-auto m-2" style={{ width: "20%" }} onClick={handleEmptyCart}>
+                    Eliminar productos
                 </button>
         </div>
     )
 }
-
-
-export default Cart;

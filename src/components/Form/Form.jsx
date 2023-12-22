@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { FirebaseContext } from "../../context/FirebaseContext";
 import { CartContext } from "../../context/CartContext";
+import "./Form.css";
 
 export const Form = ({ cartItems, total }) => {
 
@@ -116,18 +117,18 @@ export const Form = ({ cartItems, total }) => {
                 />
                 {emailError && <div className="invalid-feedback">{emailError}</div>} 
 
-            <button type="submit" className="btn btn-primary m-2">
+            <button type="submit" className="btn btn-dark mt-4">
                 Finalizar compra
             </button>
         </form>
 
         {orderInfo && (
-                <div className="alert alert-success mt-3" role="alert" style={{ width: "40%" }}>
-                    <h4 className="alert-heading">¡Compra realizada con éxito!</h4>
+                <div className="cardCompra" role="alert" style={{ width: "40%" }}>
+                    <h4>¡Compra realizada con éxito, gracias por confiar en nosotros!</h4>
                     <p>Tu orden con ID número {orderInfo.orderId} ha sido procesada.
                     <br></br>
                     <br></br>
-                    Detalles de la compra:</p>
+                    Detalles:</p>
                     <ul>
                         {orderInfo.items.map((item) => (
                             <li key={item.id}>
@@ -135,7 +136,7 @@ export const Form = ({ cartItems, total }) => {
                             </li>
                         ))}
                     </ul>
-                    <b>Total de la compra: ${orderInfo.items.reduce((total, item) => total + item.quantity * item.price, 0)}</b>
+                    <b>Total: ${orderInfo.items.reduce((total, item) => total + item.quantity * item.price, 0)}</b>
                 </div>
             )}
         </div>

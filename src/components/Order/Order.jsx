@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { CartContext } from "../../context/CartContext";
 import { Form } from "../Form/Form";
+import "./Order.css";
 
     export const Order = () => {
         const { cartItems, totalCartItems } = useContext(CartContext)
@@ -21,7 +22,7 @@ import { Form } from "../Form/Form";
 
     return (
         <div>
-            <h2 className="text-primary m-2">Datos del cliente</h2>
+            <h2 className="datos">Ingrese sus datos</h2>
 
             <Form
                 userData={userData}
